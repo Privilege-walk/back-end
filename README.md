@@ -5,4 +5,5 @@ _**Developer Note:**_ Please update the gitignore before you push. Make sure the
 ## 1. Without using Docker
 * At first, create a python virtual environment by running the comand `virtualenv venv`. (If you don't have `virtualenv` installed, Google it up and install it). Note: you can also use your own name instead of `venv`, but please make sure you include that in the `.gitignore` file.
 * Switch to (activate) the virtual environment by running `source <path_to_the_venv_you_created>/venv/bin/activate`. Usually, you'd be running it within the app's directory, so you'll just have to run `source venv/bin/activate`.
+* Install the dependencies by running `pip3 install -r requirements.txt`, which will read the dependencies from `requirements.txt` file install them for you.
 * To run the development server, just run `python3 manage.py runserver`.
