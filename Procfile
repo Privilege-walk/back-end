@@ -1,0 +1,1 @@
+web: gunicorn privilege_walk_be.wsgi --log-file -
