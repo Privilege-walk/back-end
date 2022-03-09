@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # Third party frameworks
     'rest_framework',
+    'behave_django',
 
     # Custom apps
     'user_mgmt.apps.UserMgmtConfig',
