@@ -1,10 +1,8 @@
 # Created by surajsjain at 3/9/22
 Feature: showing off behave
-  # Enter feature description here
-  Just testing out behave, how it works and stuff
-
+  Just copied this from Behave's documentation
   Scenario: run a simple test
-    # Enter steps here
-    Given we have behave installed
-    When we implement a test
-    Then behave will run it for us!
+     Given we have behave installed
+      When we implement a test
+      Then behave will test it for us!
+      And the main page response will say "Howdy"
