@@ -8,6 +8,7 @@ behave-django==1.4.0
 certifi==2021.10.8
 charset-normalizer==2.0.12
 colorama==0.4.4
+coverage==6.3.2
 cssselect==1.1.0
 Django==4.0.3
 django-nose==1.4.7
