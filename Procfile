@@ -1,1 +1,1 @@
-web: gunicorn privilege_walk_be.wsgi --log-file -
+web: sh run_heroku.sh
