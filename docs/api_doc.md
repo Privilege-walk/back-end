@@ -55,3 +55,47 @@ This could be because the username or the email already exists
     "created": "email exists"
 }
 ```
+
+## 2. Log In (Host Login)
+### Description
+<table>
+<tr>
+    <td>Endpoint</td>
+    <td>Method</td>
+</tr>
+<tr>
+    <td>/auth/login/</td>
+    <td>POST</td>
+</tr>
+</table>
+
+### Input data
+
+**Type:** JSON
+
+**Sample Input:**
+```angular2html
+{
+    "username": "acoolsomebody",
+    "password": "CoolFolks12345!"
+}
+```
+
+### Response data
+**Type:** JSON
+
+**Sample Response (user creation successful):**
+```angular2html
+{
+    "status": true,
+    "Token": "123bkjbajksbdjkab12bek1b"
+}
+```
+
+**Sample Response (user creation unsuccessful):**
+
+```angular2html
+{
+    "status": false
+}
+```
