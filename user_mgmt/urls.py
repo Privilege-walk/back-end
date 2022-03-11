@@ -1,5 +1,5 @@
 from django.urls import path
-from user_mgmt.controllers.main_page_hello_API import SayHello
+from .controllers.main_page_hello_API import SayHello
 from .controllers.auth_apis import SignUp
 
 urlpatterns = [
