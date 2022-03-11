@@ -56,13 +56,6 @@ class Login(APIView):
 
     permission_classes = [AllowAny]
 
-    def get(self, request, format=None):
-        return Response(
-            {
-                "status": False
-            }
-        )
-
     def post(self, request, format=None):
         data = request.data
 
