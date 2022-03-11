@@ -100,3 +100,16 @@ class LoginTestCase(TestCase):
 
         resp = self.client.post('/auth/login/', data=inp)
         self.assertEqual(resp.data, expected_out)
+
+    def test_user_does_not_exist(self):
+        inp = {
+            "username": "ironman",
+            "password": "321Pass"
+        }
+
+        expected_out = {
+            "status": False,
+        }
+
+        resp = self.client.post('/auth/login/', data=inp)
+        self.assertEqual(resp.data, expected_out)
