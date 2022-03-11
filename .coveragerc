@@ -1,0 +1,9 @@
+[run]
+branch = True
+
+[report]
+omit=
+    behave_tests/*
+    manage.py
+    */wsgi.py
+    */asgi.py

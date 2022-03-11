@@ -11,5 +11,3 @@ class HelloWorldTestCase(TestCase):
         self.assertEqual(resp.data, {
                 "message": "Howdy! Thanks for visiting the back-end of Privilege Walk"
             })
-        
-        # self.assertEqual(cat.speak(), 'The cat says "meow"')

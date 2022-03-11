@@ -27,7 +27,8 @@ Note: Type can either be JSON, URL parameters, or anything else that can be take
     "username": "acoolsomebody",
     "password": "CoolFolks12345!",
     "first_name": "Jon",
-    "last_name": "Doe"
+    "last_name": "Doe",
+    "email": "jondoe@yahoo.com"
 }
 ```
 
@@ -37,15 +38,64 @@ Note: Type can either be JSON, URL parameters, or anything else that can be take
 **Sample Response (user creation successful):**
 ```angular2html
 {
-    "created": true
+    "created": "success"
 }
 ```
 
 **Sample Response (user creation unsuccessful):**
-This could be because the user already exists
+This could be because the username or the email already exists
 
 ```angular2html
 {
-    "created": false
+    "created": "username exists"
+}
+```
+```angular2html
+{
+    "created": "email exists"
+}
+```
+
+## 2. Log In (Host Login)
+### Description
+<table>
+<tr>
+    <td>Endpoint</td>
+    <td>Method</td>
+</tr>
+<tr>
+    <td>/auth/login/</td>
+    <td>POST</td>
+</tr>
+</table>
+
+### Input data
+
+**Type:** JSON
+
+**Sample Input:**
+```angular2html
+{
+    "username": "acoolsomebody",
+    "password": "CoolFolks12345!"
+}
+```
+
+### Response data
+**Type:** JSON
+
+**Sample Response (user creation successful):**
+```angular2html
+{
+    "status": true,
+    "token": "123bkjbajksbdjkab12bek1b"
+}
+```
+
+**Sample Response (user creation unsuccessful):**
+
+```angular2html
+{
+    "status": false
 }
 ```
