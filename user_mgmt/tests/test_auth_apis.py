@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.authtoken.models import Token
 
+
 class SignUpTestCase(TestCase):
     def setUp(self) -> None:
         usr = User.objects.create_user("12thMan", "twelve@testtamu.edu", "SomePassword123")
@@ -26,7 +27,6 @@ class SignUpTestCase(TestCase):
         resp = self.client.post('/auth/signup/', data=user_data)
 
         self.assertEqual(resp.data, expected_out)
-
 
     def test_duplicate_signup_username(self):
         user_data = {
