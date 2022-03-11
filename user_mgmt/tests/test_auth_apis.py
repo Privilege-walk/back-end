@@ -82,7 +82,7 @@ class LoginTestCase(TestCase):
 
         expected_out = {
             "status": True,
-            "token": self.user_auth_token
+            "token": self.user_auth_token.key
         }
 
         resp = self.client.post('/auth/login/', data=inp)
