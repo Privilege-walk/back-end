@@ -88,7 +88,7 @@ This could be because the username or the email already exists
 ```angular2html
 {
     "status": true,
-    "Token": "123bkjbajksbdjkab12bek1b"
+    "token": "123bkjbajksbdjkab12bek1b"
 }
 ```
 
