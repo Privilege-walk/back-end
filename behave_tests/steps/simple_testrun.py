@@ -11,7 +11,7 @@ def step_impl(context):
 
 @then('behave will test it for us!')
 def step_impl(context):
-    assert context.failed is False
+    assert context.failed is True
 
 @then('the main page response will say "{message}"')
 def step_impl(context, message):
