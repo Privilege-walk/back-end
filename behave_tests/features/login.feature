@@ -7,3 +7,8 @@ Feature: Login authentication
       When I make an API call to the login API with my correct username and password
       Then I expect the response to tell me that I have logged in successfully
       And Also give me a token that I can use in the future to authenticate to the back-end
+
+  Scenario: The host's login must be unsuccessful
+    Given that I am someone on the internet
+      When I make an API call to the login API with my a wrong username or password
+      Then I expect the response to tell me that I have not logged in successfully

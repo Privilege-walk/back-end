@@ -46,3 +46,26 @@ def step_impl(context):
 @step("Also give me a token that I can use in the future to authenticate to the back-end")
 def step_impl(context):
     assert "token" in context.api_response_data
+
+
+@given("that I am someone on the internet")
+def step_impl(context):
+    pass
+
+
+@when("I make an API call to the login API with my a wrong username or password")
+def step_impl(context):
+    data = {
+        "username": "somerandomusername",
+        "password": "somerandompassword",
+    }
+
+    resp = requests.post(context.test.live_server_url + "/auth/login/", data)
+    assert resp.status_code >= 200 and resp.status_code < 300
+
+    context.api_response_data = resp.json()
+
+
+@then("I expect the response to tell me that I have not logged in successfully")
+def step_impl(context):
+    assert context.api_response_data["status"] == False
