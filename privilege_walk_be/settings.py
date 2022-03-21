@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     # Custom apps
     'user_mgmt.apps.UserMgmtConfig',
+    'host.apps.HostConfig',
 ]
 
 MIDDLEWARE = [
