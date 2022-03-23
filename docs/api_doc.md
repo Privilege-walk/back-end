@@ -176,13 +176,14 @@ This API can be called to create an event. The host will be set as the user whos
 #### Request Body:
 ```angular2html
 {
-    "title": "The event's title goes here"
+    "name": "The event's title goes here"
 }
 ```
 
 ### Sample Output
 ```angular2html
 {
-    "status": "success"
+    "status": "created",
+    "id": 890
 }
 ```
