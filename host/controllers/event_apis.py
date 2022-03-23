@@ -20,3 +20,23 @@ class AllEvents(APIView):
                 "events": events_ser.data
             }
         )
+
+
+class CreateEvent(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        event = Event.objects.create(
+            host=request.user,
+            name=request.data["name"],
+            status="created",
+        )
+
+        return Response(
+            {
+                "status": event.status,
+                "id": event.id,
+            }
+        )
