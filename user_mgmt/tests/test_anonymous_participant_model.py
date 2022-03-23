@@ -27,13 +27,13 @@ class AnonymousParticipantTestCase(TestCase):
 
         self.test_event = sample_event
 
-    def test_test_unique_user_code_auto_generation(self):
+    def test_unique_user_code_auto_generation(self):
         part_1, part_2 = AnonymousParticipant.objects.all()
 
         self.assertNotEqual(part_1.unique_code, "")
         self.assertNotEqual(part_2.unique_code, "")
 
-    def test_test_unique_user_code_manual_generation(self):
+    def test_unique_user_code_manual_generation(self):
         some_participant = AnonymousParticipant.objects.create(
             event=self.test_event
         )
@@ -41,13 +41,13 @@ class AnonymousParticipantTestCase(TestCase):
         regenerated_participant_code = some_participant.generate_unique_code()
         self.assertNotEqual(regenerated_participant_code, some_participant.unique_code)
 
-    def test_test_unique_user_code_format(self):
+    def test_unique_user_code_format(self):
         part_1, part_2 = AnonymousParticipant.objects.all()
 
         self.assertEqual(len(part_1.unique_code), 4)
         self.assertEqual(len(part_2.unique_code), 4)
 
-    def test_test_unique_user_code_uniqueness(self):
+    def test_unique_user_code_uniqueness(self):
         part_1, part_2 = AnonymousParticipant.objects.all()
 
         self.assertNotEqual(part_2.unique_code, part_1.unique_code)
