@@ -99,3 +99,90 @@ This could be because the username or the email already exists
     "status": false
 }
 ```
+
+# Event APIs
+## 1. Get all events
+### Description
+This API can be called on the main dashboard page to get all the events created by a particular host (typically, the host who has logged in).
+
+<table>
+<tr>
+    <td>Endpoint</td>
+    <td>Method</td>
+</tr>
+<tr>
+    <td>/host/events/all/</td>
+    <td>GET</td>
+</tr>
+</table>
+
+### Input data
+**Type:** JSON
+#### Request Header:
+```angular2html
+{
+    "Authorization": "Token <whatever_the_host's_token_is>"
+}
+```
+#### Request Body:
+Not required
+
+### Sample Output
+```angular2html
+{
+    "events": [
+        {
+            "id": 123,
+            "name": "Halloween",
+            "status": "Created"
+        },
+        {
+            "id": 456,
+            "name": "New Year",
+            "status": "Running"
+        },
+        {
+            "id": 789,
+            "name": "Orientation",
+            "status": "Ended"
+        }
+    ]
+}
+```
+
+## 2. Create Event
+### Description
+This API can be called to create an event. The host will be set as the user whose token is provided in the auth section of the request header.
+
+<table>
+<tr>
+    <td>Endpoint</td>
+    <td>Method</td>
+</tr>
+<tr>
+    <td>/host/events/create/</td>
+    <td>POST</td>
+</tr>
+</table>
+
+### Input data
+**Type:** JSON
+#### Request Header:
+```angular2html
+{
+    "Authorization": "Token <whatever_the_host's_token_is>"
+}
+```
+#### Request Body:
+```angular2html
+{
+    "title": "The event's title goes here"
+}
+```
+
+### Sample Output
+```angular2html
+{
+    "status": "success"
+}
+```
