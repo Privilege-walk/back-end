@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Event(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
-    status = models.CharField(max_length=50)  # Choices: Created, Running, Ended
+    status = models.CharField(max_length=50)  # Choices: Created, Running, Ended, Archived
 
 
 class Question(models.Model):
