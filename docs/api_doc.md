@@ -183,6 +183,7 @@ This API can be called to create an event. The host will be set as the user whos
 ### Sample Output
 ```angular2html
 {
-    "status": "success"
+    "status": "success",
+    "id": 890
 }
 ```
