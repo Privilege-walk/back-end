@@ -17,13 +17,13 @@ class AnonymousParticipant(models.Model):
         generated_code = ''
         exists = True
 
-        while (exists):
+        while (exists == True):
             for i in range(4):
                 generated_code += chr(ord('A') + randint(0, 25))
 
             n_prev = len(AnonymousParticipant.objects.filter(unique_code=generated_code))
 
             if n_prev == 0:
-                break
+                exists = False
 
         return generated_code
