@@ -187,3 +187,57 @@ This API can be called to create an event. The host will be set as the user whos
     "id": 890
 }
 ```
+
+# Question and answer APIs
+## 1. Create Question
+### Description
+This API can be used to create a question by specifying what the question is, the answer choices, and the move points for each answer choice.
+
+<table>
+<tr>
+    <td>Endpoint</td>
+    <td>Method</td>
+</tr>
+<tr>
+    <td>/host/qa/create/</td>
+    <td>POST</td>
+</tr>
+</table>
+
+### Input data
+**Type:** JSON
+#### Request Header:
+```angular2html
+{
+    "Authorization": "Token <whatever_the_host's_token_is>"
+}
+```
+#### Request Body:
+```angular2html
+{
+    "event_id": 123,
+    "title": "The question's title goes here",
+    "choices": [
+        {
+            "description": "Pizza",
+            "value": 1
+        },
+        {
+            "description": "Ice Cream",
+            "value": 2
+        },
+        {
+            "description": "Salt Water",
+            "value": -1
+        }
+    ]
+}
+```
+
+### Sample Output
+```angular2html
+{
+    "status": "created",
+    "id": 456
+}
+```
