@@ -7,8 +7,8 @@ This will contain different types of APIs and how to use them, along with sample
 This API can be called to sign a user up as a  privilege walk host.
 <table>
 <tr>
-    <td>Endpoint</td>
-    <td>Method</td>
+    <th>Endpoint</th>
+    <th>Method</th>
 </tr>
 <tr>
     <td>/auth/signup/</td>
@@ -60,8 +60,8 @@ This could be because the username or the email already exists
 ### Description
 <table>
 <tr>
-    <td>Endpoint</td>
-    <td>Method</td>
+    <th>Endpoint</th>
+    <th>Method</th>
 </tr>
 <tr>
     <td>/auth/login/</td>
@@ -107,8 +107,8 @@ This API can be called on the main dashboard page to get all the events created 
 
 <table>
 <tr>
-    <td>Endpoint</td>
-    <td>Method</td>
+    <th>Endpoint</th>
+    <th>Method</th>
 </tr>
 <tr>
     <td>/host/events/all/</td>
@@ -156,8 +156,8 @@ This API can be called to create an event. The host will be set as the user whos
 
 <table>
 <tr>
-    <td>Endpoint</td>
-    <td>Method</td>
+    <th>Endpoint</th>
+    <th>Method</th>
 </tr>
 <tr>
     <td>/host/events/create/</td>
@@ -195,8 +195,8 @@ This API can be used to create a question by specifying what the question is, th
 
 <table>
 <tr>
-    <td>Endpoint</td>
-    <td>Method</td>
+    <th>Endpoint</th>
+    <th>Method</th>
 </tr>
 <tr>
     <td>/host/qa/create/</td>
@@ -241,3 +241,84 @@ This API can be used to create a question by specifying what the question is, th
     "id": 456
 }
 ```
+
+
+## 2. View all questions
+### Description
+This can be used to view all the questions and the answers available for each question for a particular event
+
+<table>
+<tr>
+    <th>Endpoint</th>
+    <th>Method</th>
+</tr>
+<tr>
+    <td>/host/qa/eventwise_qas/</td>
+    <td>GET</td>
+</tr>
+</table>
+
+### Input data
+**Type:** JSON
+#### Request Header:
+```angular2html
+{
+    "Authorization": "Token <whatever_the_host's_token_is>"
+}
+```
+#### Request Body:
+Not Required
+
+#### URL Parameters:
+Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
+
+<table>
+<tr>
+    <th>Parameter</th>
+    <th>Example Value</th>
+</tr>
+<tr>
+    <td>event_id</td>
+    <td>123</td>
+</tr>
+</table>
+
+### Sample Output
+```angular2html
+{
+    "event_id": 123,
+    "description": "The question's title goes here",
+    "questions": [
+        {
+            "id": 890,
+            "description": "The Question content",
+            "choices": [
+                {
+                    "id": 876,
+                    "description": "Pizza",
+                    "value": 1
+                },
+                {
+                    "id": 54,
+                    "description": "Ice Cream",
+                    "value": 2
+                },
+                {
+                    "id": 89,
+                    "description": "Salt Water",
+                    "value": -1
+                },
+                .
+                .
+                .
+            ]
+        },
+        .
+        .
+        .
+    ]
+}
+```
+
+* `questions` will contain the list of all the questions within the event.
+* Each of the object within `questions` will represent a question and will contain a list of answer choice objects within a list called `choices`.
