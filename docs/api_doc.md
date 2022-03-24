@@ -287,7 +287,8 @@ Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
 ```angular2html
 {
     "event_id": 123,
-    "description": "The question's title goes here",
+    "name": "Party",
+    "status": "created",
     "questions": [
         {
             "id": 890,
