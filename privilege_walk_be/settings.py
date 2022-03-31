@@ -107,6 +107,18 @@ if run_type == "heroku":
         }
     }
 
+elif run_type == "docker_compose":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_NAME'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'HOST': 'db',
+            'PORT': 5432,
+        }
+    }
+
 # Local test database
 else:
     DATABASES = {
