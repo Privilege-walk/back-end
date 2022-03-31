@@ -7,8 +7,7 @@ on:
     branches: [ aws-depl, main ]
 
 jobs:
-  build:
-
+  build-test-deploy:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -17,22 +16,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
     - name: Run Tests
       run: |
         python manage.py test
+    - name: Docker build
+      run: |
+        echo "This is the docker build step"
 
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Docker building
-        run: |
-          echo "Howdy"
-          echo "World"
+    - name: Docker push
+      run: |
+        echo "Pushing the docker image to the docker registry"
+
+    - name: AWS EC2 deploy
+      run: |
+        echo "Connecting to EC2 and deploying the new docker image"
