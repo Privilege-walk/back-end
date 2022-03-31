@@ -28,3 +28,11 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker building
+        run: |
+          echo "Howdy"
+          echo "World"
