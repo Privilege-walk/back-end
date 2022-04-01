@@ -15,3 +15,5 @@ RUN python3 manage.py collectstatic --clear --noinput
 
 ENV PORT=8000
 EXPOSE 8000
+
+CMD sh run.sh
