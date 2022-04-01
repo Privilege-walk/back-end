@@ -41,11 +41,11 @@ jobs:
         DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
         DOCKER_IMAGE_NAME: ${{secrets.DOCKER_IMAGE_NAME}}
       run: |
-        docker build -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:latest .
+        docker build -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME .
 
     - name: Docker push
       run: |
-        docker push $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:latest
+        docker push $DOCKER_USERNAME/$DOCKER_IMAGE_NAME
 
     - name: AWS EC2 deploy
       run: |
