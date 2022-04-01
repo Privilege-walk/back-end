@@ -51,5 +51,11 @@ jobs:
         docker push $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:latest
 
     - name: AWS EC2 deploy
-      run: |
-        echo "Connecting to EC2 and deploying the new docker image"
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{secrets.AWS_EC2_IP}}
+        port: 22
+        username: ${{secrets.AWS_EC2_USERNAME}}
+        key: ${{secrets.EC2_SSH_PVT_KEY}}
+        script: |
+          echo "Connecting to EC2 and deploying the new docker image"
