@@ -58,4 +58,7 @@ jobs:
         username: ${{secrets.AWS_EC2_USERNAME}}
         key: ${{secrets.EC2_SSH_PVT_KEY}}
         script: |
-          echo "Connecting to EC2 and deploying the new docker image"
+          sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
+          sudo docker rm -f backend_django_server 2> /dev/null
+          sudo docker run -d --name backend_django_server -p 8000:8000 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
+          sudo docker system prune --all
