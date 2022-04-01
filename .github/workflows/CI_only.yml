@@ -1,10 +1,7 @@
-name: Django CI
+name: Django CI and Deploy to AWS
 
 on:
-  push:
-    branches: [ aws-depl ]
   pull_request:
-    branches: [ aws-depl, main ]
 
 jobs:
   build-test-deploy:
@@ -30,14 +27,3 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
-    - name: Docker build
-      run: |
-        echo "This is the docker build step"
-
-    - name: Docker push
-      run: |
-        echo "Pushing the docker image to the docker registry"
-
-    - name: AWS EC2 deploy
-      run: |
-        echo "Connecting to EC2 and deploying the new docker image"
