@@ -61,4 +61,4 @@ jobs:
           sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
           sudo docker rm -f backend_django_server 2> /dev/null
           sudo docker run -d --name backend_django_server -p 8000:8000 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
-          sudo docker system prune --all
+          sudo docker system prune --all --force
