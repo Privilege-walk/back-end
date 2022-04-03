@@ -63,7 +63,7 @@ jobs:
           sudo docker run -d --name backend_django_server \
           -p 8000:8000 \
           ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest \
-          -e run_type=aws \
+          -e run_type="aws" \
           -e DB_NAME=${{secrets.DB_NAME}} \
           -e DB_USERNAME=${{secrets.DB_USERNAME}} \
           -e DB_PASSWORD=${{secrets.DB_PASSWORD}} \
