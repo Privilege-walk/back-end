@@ -60,5 +60,14 @@ jobs:
         script: |
           sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
           sudo docker rm -f backend_django_server 2> /dev/null
-          sudo docker run -d --name backend_django_server -p 8000:8000 ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
+          sudo docker run -d --name backend_django_server \
+          -p 8000:8000 \
+          ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest \
+          --env run_type="aws" \
+          --env DB_NAME=${{secrets.DB_NAME}} \
+          --env DB_USERNAME=${{secrets.DB_USERNAME}} \
+          --env DB_PASSWORD=${{secrets.DB_PASSWORD}} \
+          --env DB_HOST=${{secrets.DB_HOST}} \
+          --env DB_PORT=${{secrets.DB_PORT}}
+
           sudo docker system prune --all --force
