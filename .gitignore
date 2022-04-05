@@ -132,3 +132,6 @@ dmypy.json
 # IDE ignores
 .idea/
 /staticfiles/
+
+# Docker volumes
+/data/
