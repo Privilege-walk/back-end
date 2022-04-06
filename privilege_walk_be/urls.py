@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from channels.routing import URLRouter
 
-import chat.routing
+import walk.urls
 
 # HTTP URLs
 urlpatterns = [
@@ -30,5 +30,5 @@ urlpatterns = [
 
 # Websocket URLs
 websocket_urlpatterns = URLRouter([
-    path('ws/', URLRouter(chat.routing.websocket_urlpatterns)),
+    path('ws/walk/', URLRouter(walk.urls.websocket_urlpatterns)),
 ])
