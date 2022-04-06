@@ -62,6 +62,33 @@ walkSocket.onopen = function (event) {
     console.log("Connected to websocket");
 }
 
+walkSocket.onmessage = function (event)
+{
+    const inData = JSON.parse(event.data);
+    receive_handler(inData);
+}
+
+function receive_handler(inData)
+{
+    // Do nothing if the message received is only for the participants
+    if(inData['meant_for'] === 'participant')
+    {
+        return;
+    }
+
+
+    // Handling the active users count updating
+    if(inData['type'] == 'active_user_count')
+    {
+        set_active_users(inData['data']['n_active_users']);
+    }
+}
+
+// Active users control
+var active_users_count_display = document.getElementById("user_count");
+function set_active_users(n_active_users) {
+    active_users_count_display.innerHTML = n_active_users;
+}
 
 // Question control
 var question_display = document.getElementById("question_title");
