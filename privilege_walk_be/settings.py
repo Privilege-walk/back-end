@@ -94,14 +94,23 @@ WSGI_APPLICATION = 'privilege_walk_be.wsgi.application'
 
 ASGI_APPLICATION = 'privilege_walk_be.asgi.application'
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+
+if run_type == "aws":
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('localhost', 6379)],
+            },
         },
-    },
-}
+    }
+
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer'
+        }
+    }
 
 
 # Database
