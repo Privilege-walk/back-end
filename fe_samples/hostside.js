@@ -96,6 +96,13 @@ var question_display = document.getElementById("question_title");
 var current_question_number = -1;
 function nextQuestion() {
     current_question_number++;
+
+    walkSocket.send(JSON.stringify(
+        {
+            'type': 'question_move'
+        }
+    ))
+
     if(current_question_number >= questions.length)
     {
         question_display.innerHTML = "Go home now, bye!";
