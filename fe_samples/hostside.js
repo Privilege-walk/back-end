@@ -71,14 +71,14 @@ walkSocket.onmessage = function (event)
 function receive_handler(inData)
 {
     // Do nothing if the message received is only for the participants
-    if(inData['meant_for'] === 'participant')
+    if(inData['meant_for'] === 'participants')
     {
         return;
     }
 
 
     // Handling the active users count updating
-    if(inData['type'] == 'active_user_count')
+    if(inData['type'] === 'active_user_count')
     {
         set_active_users(inData['data']['n_active_users']);
     }

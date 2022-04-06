@@ -78,9 +78,15 @@ function receive_handler(inData)
 
 
     // Handling the active users count updating
-    if(inData['type'] == 'active_user_count')
+    if(inData['type'] === 'active_user_count')
     {
         set_active_users(inData['data']['n_active_users']);
+    }
+
+    // Handling the question move
+    if(inData['type'] === 'question_move')
+    {
+        nextQuestion();
     }
 }
 
