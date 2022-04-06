@@ -351,10 +351,17 @@ This API can be used to register a participant as an anonymous participant and g
 }
 ```
 
-### Sample Output
+### Sample Output (success)
 ```angular2html
 {
     "status": "registered",
     "participant_code": "ABCDXYZ"
+}
+```
+
+### Sample Output (failure)
+```angular2html
+{
+    "message": "<details of the failure>"
 }
 ```
