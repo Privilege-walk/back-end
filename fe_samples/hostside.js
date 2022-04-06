@@ -87,7 +87,8 @@ function receive_handler(inData)
 // Active users control
 var active_users_count_display = document.getElementById("user_count");
 function set_active_users(n_active_users) {
-    active_users_count_display.innerHTML = n_active_users;
+    var potential = n_active_users - 1
+    active_users_count_display.innerHTML = (potential >= 0)? potential: 0;
 }
 
 // Question control
