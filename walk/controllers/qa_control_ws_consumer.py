@@ -1,6 +1,10 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.db import database_sync_to_async
 
+from user_mgmt.models import AnonymousParticipant
+from host.models import AnswerChoice
+from walk.models import Response as AnswerResponse
 
 class QAControlConsumer(AsyncWebsocketConsumer):
 
@@ -56,7 +60,48 @@ class QAControlConsumer(AsyncWebsocketConsumer):
 
     # Handling the message receiving
     async def receive(self, text_data=None, bytes_data=None):
-        pass
+        in_data = json.loads(text_data)
+
+        if in_data['type'] == 'question_move':
+            # Telling all the participants to switch to the next question on the list
+            await self.channel_layer.group_send(
+                self.room_name,
+                {
+                    'type': 'question_move'
+                }
+            )
+
+            # TODO: Resetting the answer count
+
+        elif in_data['type'] == 'answer_choice':
+
+            # Storing the answer choice
+            data = in_data['data']
+            participant_code = data['participant_code']
+            answer_choice_id = data['answer_choice_id']
+            self.record_answer_choice(participant_code, answer_choice_id)
+
+            # TODO: Broadcasting the answer count
+
+    # Recording the participant's answer choice in the db
+    @database_sync_to_async
+    def record_answer_choice(self, participant_code, answer_choice_id):
+        participant = AnonymousParticipant.objects.get(unique_code=participant_code)
+        answer = AnswerChoice.objects.get(id=answer_choice_id)
+        AnswerResponse.objects.create(
+            participant=participant,
+            answer=answer
+        )
+
+
+    # Broadcasting the question move
+    async def question_move(self, event):
+        await self.send(
+            text_data=json.dumps({
+                'meant_for': 'participants',
+                'type': 'question_move',
+            })
+        )
 
     # Broadcasting the count of the active users in the room
     async def active_user_count(self, event):
