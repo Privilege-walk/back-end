@@ -16,11 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-import user_mgmt.urls
+from channels.routing import URLRouter
 
+import chat.routing
+
+# HTTP URLs
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user_mgmt.urls')),
     path('host/', include('host.urls')),
     path('chat/', include('chat.urls')),
 ]
+
+# Websocket URLs
+websocket_urlpatterns = URLRouter([
+    path('ws/', URLRouter(chat.routing.websocket_urlpatterns)),
+])
