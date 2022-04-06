@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 class QAControlConsumer(AsyncWebsocketConsumer):
     async def connect(self):
+        room_name = self.scope['url_route']['kwargs']['eventid']
         await self.accept()
 
     async def disconnect(self, code):
