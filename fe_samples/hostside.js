@@ -82,6 +82,12 @@ function receive_handler(inData)
     {
         set_active_users(inData['data']['n_active_users']);
     }
+
+    // Handling the change in the number of user responses
+    else if(inData['type'] === 'answer_count')
+    {
+        set_answered_users(inData['data']['n_users_answered']);
+    }
 }
 
 // Active users control
@@ -89,6 +95,12 @@ var active_users_count_display = document.getElementById("user_count");
 function set_active_users(n_active_users) {
     var potential = n_active_users;
     active_users_count_display.innerHTML = (potential >= 0)? potential: 0;
+}
+
+// Answered users control
+var answered_users_count_display = document.getElementById("answer_count");
+function set_answered_users(n_users) {
+    answered_users_count_display.innerHTML = n_users;
 }
 
 // Question control
