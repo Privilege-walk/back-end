@@ -72,7 +72,20 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                 }
             )
 
-            # TODO: Resetting the answer count
+            # Resetting the answer count
+            ac_name = self.room_name + "_answer_count"
+            answer_count = getattr(self.channel_layer, ac_name, 0)
+            if not answer_count:
+                setattr(self.channel_layer, ac_name, 0)
+            else:
+                setattr(self.channel_layer, ac_name, 0)
+
+            await self.channel_layer.group_send(
+                self.room_name,
+                {
+                    'type': 'answered_users_count'
+                }
+            )
 
         elif in_data['type'] == 'answer_choice':
 
@@ -82,7 +95,20 @@ class QAControlConsumer(AsyncWebsocketConsumer):
             answer_choice_id = data['answer_choice_id']
             await self.record_answer_choice(participant_code, answer_choice_id)
 
-            # TODO: Broadcasting the answer count
+            # Updating and Broadcasting the answer count
+            ac_name = self.room_name + "_answer_count"
+            answer_count = getattr(self.channel_layer, ac_name, 0)
+            if not answer_count:
+                setattr(self.channel_layer, ac_name, 1)
+            else:
+                setattr(self.channel_layer, ac_name, answer_count + 1)
+
+            await self.channel_layer.group_send(
+                self.room_name,
+                {
+                    'type': 'answered_users_count'
+                }
+            )
 
     # Recording the participant's answer choice in the db
     @database_sync_to_async
@@ -113,6 +139,21 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                 'type': 'active_user_count',
                 'data': {
                     'n_active_users': n_active_users,
+                }
+            })
+        )
+
+    # Broadcasting the count of the number of users who have answered the current question
+    async def answered_users_count(self, event):
+        ac_name = self.room_name + "_answer_count"
+        answer_count = getattr(self.channel_layer, ac_name, 0)
+
+        await self.send(
+            text_data=json.dumps({
+                'meant_for': 'all',
+                'type': 'answer_count',
+                'data': {
+                    'n_users_answered': answer_count,
                 }
             })
         )
