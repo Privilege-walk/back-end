@@ -19,7 +19,6 @@ charset-normalizer==2.0.12
 click==8.1.2
 colorama==0.4.4
 constantly==15.1.0
-container-transform==1.1.5
 coverage==6.3.2
 cryptography==36.0.2
 cssselect==1.1.0
