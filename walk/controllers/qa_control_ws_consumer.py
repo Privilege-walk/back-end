@@ -79,7 +79,7 @@ class QAControlConsumer(AsyncWebsocketConsumer):
             data = in_data['data']
             participant_code = data['participant_code']
             answer_choice_id = data['answer_choice_id']
-            self.record_answer_choice(participant_code, answer_choice_id)
+            await self.record_answer_choice(participant_code, answer_choice_id)
 
             # TODO: Broadcasting the answer count
 
