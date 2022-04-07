@@ -111,3 +111,30 @@ function nextQuestion() {
         question_display.innerHTML = questions[current_question_number]["description"];
     }
 }
+
+// Answer choice
+/**
+ * This function chooses the first choice and send it to the back-end
+ * This is for WebSocket demo purposes only
+ * For the actual react implementation, replace this function to send the choice that the user has chosen
+ * */
+function chooseAnswer()
+{
+    var answer_id =
+        questions[current_question_number]
+            ["choices"][0]["id"];
+
+    var participant_code = "DOOT"; // Replace this with the participant code stored in the cookies
+
+    walkSocket.send(
+        JSON.stringify(
+            {
+                "type": "answer_choice",
+                "data": {
+                    "participant_code": participant_code,
+                    "answer_choice_id": answer_id
+                }
+            }
+        )
+    );
+}
