@@ -6,6 +6,7 @@ from user_mgmt.models import AnonymousParticipant
 from host.models import AnswerChoice
 from walk.models import Response as AnswerResponse
 
+
 class QAControlConsumer(AsyncWebsocketConsumer):
 
     # Handling new user connections
@@ -92,7 +93,6 @@ class QAControlConsumer(AsyncWebsocketConsumer):
             participant=participant,
             answer=answer
         )
-
 
     # Broadcasting the question move
     async def question_move(self, event):
