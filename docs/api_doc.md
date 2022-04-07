@@ -323,3 +323,45 @@ Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
 
 * `questions` will contain the list of all the questions within the event.
 * Each of the object within `questions` will represent a question and will contain a list of answer choice objects within a list called `choices`.
+
+
+# Walk event APIs
+## 1. Register participant
+### Description
+This API can be used to register a participant as an anonymous participant and get the participant code for them.
+
+<table>
+<tr>
+    <th>Endpoint</th>
+    <th>Method</th>
+</tr>
+<tr>
+    <td>/walk/register_participant/</td>
+    <td>POST</td>
+</tr>
+</table>
+
+### Input data
+**Type:** JSON
+
+#### Request Body:
+```angular2html
+{
+    "event_id": 123
+}
+```
+
+### Sample Output (success)
+```angular2html
+{
+    "status": "registered",
+    "participant_code": "ABCDXYZ"
+}
+```
+
+### Sample Output (failure)
+```angular2html
+{
+    "message": "<details of the failure>"
+}
+```
