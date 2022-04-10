@@ -8,3 +8,5 @@ omit=
     */wsgi.py
     */asgi.py
     */settings.py
+    chat/*
+    fe_samples/*
