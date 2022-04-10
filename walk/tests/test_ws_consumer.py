@@ -3,13 +3,12 @@ import json
 from django.test import TestCase
 from channels.testing import WebsocketCommunicator
 
-
 from privilege_walk_be.asgi import application\
+
 
 class QAConsumerTest(TestCase):
     def setUp(self) -> None:
         pass
-
 
     async def test_connectivity(self):
 
