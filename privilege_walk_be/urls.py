@@ -10,7 +10,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user_mgmt.urls')),
     path('host/', include('host.urls')),
-    path('chat/', include('chat.urls')),
     path('walk/', include('walk.urls')),
 ]
 
