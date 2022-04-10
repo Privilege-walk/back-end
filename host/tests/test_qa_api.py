@@ -117,6 +117,24 @@ class ViewQuestionsTestCase(TestCase):
         assert response["id"] == self.eventId
         assert response["questions"][0]["description"] == "The question's title goes here"
 
+    def test_failure_get_questions_no_eventid(self):
+        resp = self.client.get('/host/qa/eventwise_qas/', **{'HTTP_AUTHORIZATION':'Token '+ self.user_auth_token.key})
+        
+        expected_out = {
+            "message": "Please enter an event ID"
+        }
+
+        self.assertEqual(resp.data, expected_out)
+
+    def test_failure_get_questions_wrong_eventid(self):
+        resp = self.client.get('/host/qa/eventwise_qas/?event_id='+str('12345'), **{'HTTP_AUTHORIZATION':'Token '+ self.user_auth_token.key})
+        
+        expected_out = {
+            "message": "The event ID that you've entered is not in the records"
+        }
+
+        self.assertEqual(resp.data, expected_out)
+
     def test_failure_get_questions(self):
 
         expected_out = {

@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'user_mgmt.apps.UserMgmtConfig',
     'host.apps.HostConfig',
     'walk.apps.WalkConfig',
-    'chat',
 ]
 
 MIDDLEWARE = [

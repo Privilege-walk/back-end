@@ -4,10 +4,10 @@ This will contain different types of Websockets and how to use them, along with 
 # Walk Event - Question and Answer control
 This channel can be used during the privilege walk event. The event ID will be used as the room ID
 
-**URL endpoint:** /ws/walk/qa_control/<event_id>/
+**URL endpoint:** `/ws/walk/qa_control/<event_id>/`
 
 ## Basic overview
-###As a host:
+### As a host:
 
 You can get:
 1. Active user count
@@ -16,7 +16,7 @@ You can get:
 You can send:
 1. An order to move to the next question in the list
 
-###As a participant:
+### As a participant:
 
 You can get:
 1. Active user count
@@ -35,6 +35,7 @@ _**Type:**_ Receivable message
 ```angular2html
 {
     "meant_for": "all",
+    "type": "active_user_count",
     "data": {
         "n_active_users": 12
     }
@@ -49,6 +50,7 @@ _**Type:**_ Receivable message
 ```angular2html
 {
     "meant_for": "all",
+    "type": "answer_count",
     "data": {
         "n_users_answered": 8
     }
