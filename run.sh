@@ -5,4 +5,4 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 
 # The running command
-python3 manage.py runserver localhost:8000
+daphne run privilege_walk_be.asgi
