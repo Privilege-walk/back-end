@@ -2,13 +2,22 @@ version: "3.9"
 
 services:
   db:
-    image: postgres
+    image: postgres:14.1-alpine
+    restart: always
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
   web:
     build: .
     command: sh run.sh
@@ -18,8 +27,10 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - run_type=docker_compose
+      - RUN_TYPE=docker_compose
     depends_on:
       - db
+      - cache
     links:
       - db
+      - cache

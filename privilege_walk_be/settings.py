@@ -93,6 +93,17 @@ if run_type == "aws":
         },
     }
 
+elif run_type == "docker_compose":
+    print("Running on Docker Compose")
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('cache', 6379)],
+            },
+        },
+    }
+
 else:
     print('running normally')
     CHANNEL_LAYERS = {
@@ -132,6 +143,7 @@ elif run_type == "aws":
     }
 
 elif run_type == "docker_compose":
+    print("Running on Docker Compose")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
