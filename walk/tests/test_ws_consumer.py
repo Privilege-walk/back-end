@@ -1,103 +1,112 @@
-# from channels.testing import ChannelsLiveServerTestCase
-# from selenium import webdriver
-# from selenium.webdriver.common.action_chains import ActionChains
-# from selenium.webdriver.support.wait import WebDriverWait
+import json
 
-# class QAControlConsumerTest(ChannelsLiveServerTestCase):
-#     serve_static = True  # emulate StaticLiveServerTestCase
+from django.test import TransactionTestCase
+from channels.testing import WebsocketCommunicator
 
-#     @classmethod
-#     def setUpClass(cls):
-#         super().setUpClass()
-#         try:
-#             # NOTE: Requires "chromedriver" binary to be installed in $PATH
-#             cls.driver = webdriver.Chrome()
-#         except:
-#             super().tearDownClass()
-#             raise
+from privilege_walk_be.asgi import application
 
-#     @classmethod
-#     def tearDownClass(cls):
-#         cls.driver.quit()
-#         super().tearDownClass()
+from user_mgmt.models import AnonymousParticipant
+from host.models import Event, Question, AnswerChoice
+from django.contrib.auth.models import User
 
-#     def test_connect_participant_count_update(self):
-#         try:
-#             self._connect_participant('12345')
+class QAConsumerTest(TransactionTestCase):
+    def setUp(self) -> None:
+        host_user = User.objects.create_user(
+            username='testuser',
+            email='testuser@example.com',
+            password='howdy1234'
+        )
 
-#     def _connect_participant(self, event_id):
-#         self.driver.get(self.live_server_url + '/chat/')
-#         ActionChains(self.driver).send_keys(room_name + '\n').perform()
-#         WebDriverWait(self.driver, 2).until(lambda _:
-#             room_name in self.driver.current_url)
+        eve = Event.objects.create(
+            host=host_user,
+            name='Birthday',
+            status='Created',
+        )
 
-#     def test_when_chat_message_posted_then_seen_by_everyone_in_same_room(self):
-#         try:
-#             self._enter_chat_room('room_1')
+        ques = Question.objects.create(
+            event=eve,
+            description='Do you like cake?'
+        )
 
-#             self._open_new_window()
-#             self._enter_chat_room('room_1')
+        ans = AnswerChoice.objects.create(
+            question=ques,
+            description='yes',
+            value=1
+        )
 
-#             self._switch_to_window(0)
-#             self._post_message('hello')
-#             WebDriverWait(self.driver, 2).until(lambda _:
-#                 'hello' in self._chat_log_value,
-#                 'Message was not received by window 1 from window 1')
-#             self._switch_to_window(1)
-#             WebDriverWait(self.driver, 2).until(lambda _:
-#                 'hello' in self._chat_log_value,
-#                 'Message was not received by window 2 from window 1')
-#         finally:
-#             self._close_all_new_windows()
+        self.answer_id = ans.id
 
-#     def test_when_chat_message_posted_then_not_seen_by_anyone_in_different_room(self):
-#         try:
-#             self._enter_chat_room('room_1')
+        anno_part = AnonymousParticipant.objects.create(
+            event=eve
+        )
 
-#             self._open_new_window()
-#             self._enter_chat_room('room_2')
+        anno_part.save()
+        self.participant_code = anno_part.unique_code
 
-#             self._switch_to_window(0)
-#             self._post_message('hello')
-#             WebDriverWait(self.driver, 2).until(lambda _:
-#                 'hello' in self._chat_log_value,
-#                 'Message was not received by window 1 from window 1')
+    async def test_channel(self):
 
-#             self._switch_to_window(1)
-#             self._post_message('world')
-#             WebDriverWait(self.driver, 2).until(lambda _:
-#                 'world' in self._chat_log_value,
-#                 'Message was not received by window 2 from window 2')
-#             self.assertTrue('hello' not in self._chat_log_value,
-#                 'Message was improperly received by window 2 from window 1')
-#         finally:
-#             self._close_all_new_windows()
+        ### Testing Connectivity
 
-#     # === Utility ===
+        communicator = WebsocketCommunicator(application, "/ws/walk/qa_control/12/")
+        connected, subprotocol = await communicator.connect()
+        self.assertEqual(connected, True)
 
-#     def _enter_chat_room(self, room_name):
-#         self.driver.get(self.live_server_url + '/chat/')
-#         ActionChains(self.driver).send_keys(room_name + '\n').perform()
-#         WebDriverWait(self.driver, 2).until(lambda _:
-#             room_name in self.driver.current_url)
+        # Testing the initial active user count change
+        expected = {
+            'meant_for': 'all',
+            'type': 'active_user_count',
+            'data': {
+                'n_active_users': 1,
+            }
+        }
 
-#     def _open_new_window(self):
-#         self.driver.execute_script('window.open("about:blank", "_blank");')
-#         self.driver.switch_to_window(self.driver.window_handles[-1])
+        raw_message = await communicator.receive_from()
+        message = json.loads(raw_message)
 
-#     def _close_all_new_windows(self):
-#         while len(self.driver.window_handles) > 1:
-#             self.driver.switch_to_window(self.driver.window_handles[-1])
-#             self.driver.execute_script('window.close();')
-#         if len(self.driver.window_handles) == 1:
-#             self.driver.switch_to_window(self.driver.window_handles[0])
+        self.assertEqual(message, expected)
 
-#     def _switch_to_window(self, window_index):
-#         self.driver.switch_to_window(self.driver.window_handles[window_index])
 
-#     def _post_message(self, message):
-#         ActionChains(self.driver).send_keys(message + '\n').perform()
+        ### Testing the question move orders
 
-#     @property
-#     def _chat_log_value(self):
-#         return self.driver.find_element_by_css_selector('#chat-log').get_property('value')
+        # Host side
+        await communicator.send_to(json.dumps({
+            "type": "question_move"
+        }))
+
+        # Participant side
+        expected = {
+            "meant_for": "participants",
+            "type": "question_move",
+        }
+        raw_message = await communicator.receive_from()
+        message = json.loads(raw_message)
+        self.assertEqual(message, expected)
+
+
+        ### Testing the answer choice messages
+
+        # Participant Side
+        await communicator.send_to(
+            json.dumps({
+                "type": "answer_choice",
+                "data": {
+                    "participant_code": self.participant_code,
+                    "answer_choice_id": self.answer_id
+                }
+            })
+        )
+
+        # Everyone gets a responded count
+        expected = {
+            "meant_for": "all",
+            "type": "answer_count",
+            "data": {
+                "n_users_answered": 1
+            }
+        }
+
+        raw_message = await communicator.receive_from()
+        message = json.loads(raw_message)
+        self.assertEqual(message, expected)
+
+        await communicator.disconnect()
