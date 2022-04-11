@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3"
 
 services:
   db:
@@ -19,10 +19,10 @@ services:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
   web:
-    image: surajtamu/pvbe:latest
+    build: .
     command: sh run.sh
     ports:
-      - "80:8000"
+      - '80:8000'
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
