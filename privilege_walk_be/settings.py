@@ -83,6 +83,7 @@ ASGI_APPLICATION = 'privilege_walk_be.asgi.application'
 
 
 if run_type == "aws":
+    print("running on AWS")
     CHANNEL_LAYERS = {
         'default': {
             'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -93,6 +94,7 @@ if run_type == "aws":
     }
 
 else:
+    print('running normally')
     CHANNEL_LAYERS = {
         'default': {
             'BACKEND': 'channels.layers.InMemoryChannelLayer'
@@ -117,14 +119,15 @@ if run_type == "heroku":
     }
 
 elif run_type == "aws":
+    print("running on AWS")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.getenv("DB_NAME"),
-            'USER': os.getenv("DB_USERNAME"),
-            'PASSWORD': os.getenv("DB_PASSWORD"),
-            'HOST': os.getenv("DB_HOST"),
-            'PORT': os.getenv("DB_PORT"),
+            'NAME': "postgres",
+            'USER': "postgres",
+            'PASSWORD': "postgres",
+            'HOST': "localhost",
+            'PORT': "5432",
         }
     }
 
