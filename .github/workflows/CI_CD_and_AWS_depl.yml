@@ -59,15 +59,6 @@ jobs:
         key: ${{secrets.EC2_SSH_PVT_KEY}}
         script: |
           sudo docker pull ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
-          sudo docker rm -f backend_django_server 2> /dev/null
-          sudo docker run -d --name backend_django_server \
-          -p 8000:8000 \
-          -e RUN_TYPE=aws \
-          -e DB_NAME=${{secrets.DB_NAME}} \
-          -e DB_USERNAME=${{secrets.DB_USERNAME}} \
-          -e DB_PASSWORD=${{secrets.DB_PASSWORD}} \
-          -e DB_HOST=${{secrets.DB_HOST}} \
-          -e DB_PORT=${{secrets.DB_PORT}} \
-          ${{secrets.DOCKER_USERNAME}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
-
+          sudo docker rm -f ubuntu_web_1 2> /dev/null
+          sudo docker-compose up -d
           sudo docker system prune --all --force
