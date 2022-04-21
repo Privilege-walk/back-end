@@ -291,6 +291,8 @@ Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
     "event_id": 123,
     "name": "Party",
     "status": "created",
+    "x_label_min": "Some text to be displayed on the graph",
+    "x_label_max": "Something else you want to be displayed on the graph",
     "questions": [
         {
             "id": 890,

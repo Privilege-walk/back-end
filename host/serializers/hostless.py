@@ -7,5 +7,5 @@ class HostlessEventSerializer(ModelSerializer):
     class Meta:
         model = Event
         fields = [
-            'id', 'name', 'status',
+            'id', 'name', 'status', 'x_label_min', 'x_label_max'
         ]
