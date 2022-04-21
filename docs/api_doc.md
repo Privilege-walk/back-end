@@ -176,7 +176,9 @@ This API can be called to create an event. The host will be set as the user whos
 #### Request Body:
 ```angular2html
 {
-    "name": "The event's title goes here"
+    "name": "The event's title goes here",
+    "x_label_min": "Some text to be displayed on the graph",
+    "x_label_max": "Something else you want to be displayed on the graph"
 }
 ```
 
