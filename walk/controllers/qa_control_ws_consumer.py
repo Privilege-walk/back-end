@@ -95,7 +95,7 @@ class QAControlConsumer(AsyncWebsocketConsumer):
             answer_choice_id = data['answer_choice_id']
             await self.record_answer_choice(participant_code, answer_choice_id)
 
-            # Updating and Broadcasting the answer count
+            # Updating and Broadcasting the answer count and the answer ID increment
             ac_name = self.room_name + "_answer_count"
             answer_count = getattr(self.channel_layer, ac_name, 0)
             if not answer_count:
