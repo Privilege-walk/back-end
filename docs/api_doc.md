@@ -245,7 +245,7 @@ This API can be used to create a question by specifying what the question is, th
 ```
 
 
-## 2. View all questions
+## 2. View all questions (Event details)
 ### Description
 This can be used to view all the questions and the answers available for each question for a particular event
 
