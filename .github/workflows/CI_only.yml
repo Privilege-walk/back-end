@@ -1,10 +1,10 @@
-name: Django CI and Deploy to AWS
+name: Django CI only
 
 on:
   pull_request:
 
 jobs:
-  build-test-deploy:
+  build-test:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
