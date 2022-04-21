@@ -106,8 +106,9 @@ class QAControlConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(
                 self.room_name,
                 {
-                    'type': 'answered_users_count'
-                }
+                    'type': 'answered_users_count',
+                    'increment_answer_id': answer_choice_id,
+                },
             )
 
     # Recording the participant's answer choice in the db
@@ -147,6 +148,7 @@ class QAControlConsumer(AsyncWebsocketConsumer):
     async def answered_users_count(self, event):
         ac_name = self.room_name + "_answer_count"
         answer_count = getattr(self.channel_layer, ac_name, 0)
+        increment_answer_id = event['increment_answer_id']
 
         await self.send(
             text_data=json.dumps({
@@ -154,6 +156,7 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                 'type': 'answer_count',
                 'data': {
                     'n_users_answered': answer_count,
+                    'increment_answer_id': increment_answer_id
                 }
             })
         )
