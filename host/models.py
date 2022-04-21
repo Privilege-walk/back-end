@@ -9,6 +9,10 @@ class Event(models.Model):
     name = models.CharField(max_length=200)
     status = models.CharField(max_length=50)  # Choices: Created, Running, Ended, Archived
 
+    # Event settings parameters
+    x_label_min = models.CharField(max_length=200, default="", null=True)
+    x_label_max = models.CharField(max_length=200, default="", null=True)
+
 
 class Question(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
