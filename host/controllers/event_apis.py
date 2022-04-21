@@ -32,6 +32,8 @@ class CreateEvent(APIView):
             host=request.user,
             name=request.data["name"],
             status="created",
+            x_label_min=request.data["x_label_min"],
+            x_label_max=request.data["x_label_max"],
         )
 
         return Response(

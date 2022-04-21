@@ -176,7 +176,9 @@ This API can be called to create an event. The host will be set as the user whos
 #### Request Body:
 ```angular2html
 {
-    "name": "The event's title goes here"
+    "name": "The event's title goes here",
+    "x_label_min": "Some text to be displayed on the graph",
+    "x_label_max": "Something else you want to be displayed on the graph"
 }
 ```
 
@@ -243,7 +245,7 @@ This API can be used to create a question by specifying what the question is, th
 ```
 
 
-## 2. View all questions
+## 2. View all questions (Event details)
 ### Description
 This can be used to view all the questions and the answers available for each question for a particular event
 
@@ -289,6 +291,8 @@ Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
     "event_id": 123,
     "name": "Party",
     "status": "created",
+    "x_label_min": "Some text to be displayed on the graph",
+    "x_label_max": "Something else you want to be displayed on the graph",
     "questions": [
         {
             "id": 890,
