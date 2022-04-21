@@ -13,11 +13,13 @@ class CreateEventTestCase(TestCase):
 
     def test_successful_create_event(self):
         user_data = {
-            "name": "A new year event"
+            "name": "A new year event",
+            "x_label_min": "Some text to be displayed on the graph",
+            "x_label_max": "Something else you want to be displayed on the graph",
         }
         headers = {
             'HTTP_X_HTTP_METHOD_OVERRIDE': 'PUT',
-            "Authorization":"Token "+ self.user_auth_token.key
+            "Authorization":"Token " + self.user_auth_token.key
         }
 
         expected_out = {
@@ -52,7 +54,9 @@ class ViewEventsTestCase(TestCase):
         self.user_auth_token, _ = Token.objects.get_or_create(user=usr)
 
         user_data = {
-            "name": "A new year event"
+            "name": "A new year event",
+            "x_label_min": "Some text to be displayed on the graph",
+            "x_label_max": "Something else you want to be displayed on the graph",
         }
 
         resp = self.client.post('/host/events/create/', content_type='application/json', data=user_data, **{'HTTP_AUTHORIZATION':'Token '+ self.user_auth_token.key})
@@ -65,7 +69,9 @@ class ViewEventsTestCase(TestCase):
         {
             "id": 1,
             "name": "A new year event",
-            "status": "created"
+            "status": "created",
+            "x_label_min": "Some text to be displayed on the graph",
+            "x_label_max": "Something else you want to be displayed on the graph"
         }]
         }
 

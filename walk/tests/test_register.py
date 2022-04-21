@@ -12,7 +12,9 @@ class ParticipantRegistrationTestCase(TestCase):
         self.user_auth_token, _ = Token.objects.get_or_create(user=usr)
 
         user_data = {
-            "name": "A new year event"
+            "name": "A new year event",
+            "x_label_min": "Some text to be displayed on the graph",
+            "x_label_max": "Something else you want to be displayed on the graph",
         }
         resp = self.client.post('/host/events/create/', content_type='application/json', data=user_data, **{'HTTP_AUTHORIZATION':'Token '+ self.user_auth_token.key})
         response = resp.json()
