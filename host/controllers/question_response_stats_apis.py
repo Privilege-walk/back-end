@@ -10,7 +10,7 @@ from host.utils.get_question_response_stats import get_question_response_statist
 class QuestionResponseStatistics(APIView):
     # select position, count(position) as count from (select R.participant, sum(A.value) as position from Question Q, 
     # AnswerChoice A, Response R where Q.event = event_id and A.question_id = Q.question_id and R.answer_id = A.answer_id group by R.participant)
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         print(request.query_params)

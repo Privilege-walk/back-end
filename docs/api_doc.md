@@ -369,3 +369,160 @@ This API can be used to register a participant as an anonymous participant and g
     "message": "<details of the failure>"
 }
 ```
+
+# Results Page APIs
+## 1. View question and response statistics
+### Description
+This can be used to view the questions, answer choices and number of participants chosen that corresponding answer choice for a particular event
+
+<table>
+<tr>
+    <th>Endpoint</th>
+    <th>Method</th>
+</tr>
+<tr>
+    <td>/host/qa_stats/</td>
+    <td>GET</td>
+</tr>
+</table>
+
+### Input data
+**Type:** JSON
+#### Request Header:
+```angular2html
+{
+    "Authorization": "Token <whatever_the_host's_token_is>"
+}
+```
+#### Request Body:
+Not Required
+
+#### URL Parameters:
+Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
+
+<table>
+<tr>
+    <th>Parameter</th>
+    <th>Example Value</th>
+</tr>
+<tr>
+    <td>event_id</td>
+    <td>123</td>
+</tr>
+</table>
+
+### Sample Output
+```angular2html
+[
+    {
+        "question_id": 1,
+        "question": "Are you above 18?",
+        "answers": [
+            {
+                "answer_id": 1,
+                "answer": "Yes",
+                "count": 2
+            },
+            {
+                "answer_id": 2,
+                "answer": "No",
+                "count": 2
+            }
+        ]
+    },
+    {
+        "question_id": 2,
+        "question": "Do you like sweets?",
+        "answers": [
+            {
+                "answer_id": 3,
+                "answer": "Yes",
+                "count": 3
+            },
+            {
+                "answer_id": 4,
+                "answer": "No",
+                "count": 1
+            }
+        ]
+    },
+        .
+        .
+        .
+]
+```
+
+* `answers` will contain the list of all the answer choices for the question and count of participants who chosen the corresponding answer choice within the event.
+
+## 2. View Event statistics (for bar graph)
+### Description
+This can be used to view the line locations and number of participants standing in that particular line
+
+<table>
+<tr>
+    <th>Endpoint</th>
+    <th>Method</th>
+</tr>
+<tr>
+    <td>/host/event_stats/</td>
+    <td>GET</td>
+</tr>
+</table>
+
+### Input data
+**Type:** JSON
+#### Request Header:
+```angular2html
+{
+    "Authorization": "Token <whatever_the_host's_token_is>"
+}
+```
+#### Request Body:
+Not Required
+
+#### URL Parameters:
+Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
+
+<table>
+<tr>
+    <th>Parameter</th>
+    <th>Example Value</th>
+</tr>
+<tr>
+    <td>event_id</td>
+    <td>123</td>
+</tr>
+<tr>
+    <td>unique_code</td>
+    <td>HOAQ</td>
+</tr>
+</table>
+
+### Sample Output
+```angular2html
+{
+    "barDefaultColor": "#8884d8",
+    "data": [
+        {
+            "barName": "",
+            "count": 1,
+            "participantLocation": false
+        },
+        {
+            "barName": "",
+            "count": 1,
+            "participantLocation": false
+        },
+        {
+            "barName": "",
+            "count": 2,
+            "participantLocation": true
+        },
+        .
+        .
+        .
+    ]
+}
+```
+
+* `data` will contain the list of bars and count of participants standing on the bar by the end of the event.
