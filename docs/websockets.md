@@ -94,3 +94,23 @@ _**Type:**_ Sendable message
     }
 }
 ```
+
+## 6. Line position graph values
+The host will receive this after a participant would answer a question in the event. This should be used by the host to update the lines and the count of users on each of the lines on the graph displayed on the front end.
+
+_**Type:**_ Receivable message
+### Format
+```angular2html
+{
+    "meant_for": "host",
+    "type": "line_counts",
+    "data": {
+        "position_stats": {
+            "-22": 1,
+            "-1": 1
+        }
+    }
+}
+```
+
+The key in the `position_stats` represents the line number and the corresponding value represents the number of people on that particular line.
