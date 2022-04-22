@@ -10,6 +10,6 @@ urlpatterns = [
     path('events/create/', CreateEvent.as_view(), name="createNewEvent"),
     path('qa/create/', AddQuestion.as_view(), name="addQuestion"),
     path('qa/eventwise_qas/', EventQuestionAnswers.as_view(), name="fullEventDetails"),
-    path('qastats/', QuestionResponseStatistics.as_view(), name="getQAStats"),
-    path('eventStats/', EventStatistics.as_view(), name="eventStats")
+    path('qa_stats/', QuestionResponseStatistics.as_view(), name="getQAStats"),
+    path('event_stats/', EventStatistics.as_view(), name="eventStats")
 ]
