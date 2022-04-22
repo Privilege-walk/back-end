@@ -143,7 +143,6 @@ class QAControlConsumer(AsyncWebsocketConsumer):
 
     # Getting the line statistics
     async def get_bars_statistics(self, event_id):
-        # event_in_focus = await self.get_event_object(event_id)
         event_questions = await self.get_event_questions(event_id)
         choices = await self.get_answer_choices(event_questions)
         positions = await self.get_positions(choices)
@@ -158,11 +157,6 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                 position_counts[pos] = 1
 
         return position_counts
-
-    @database_sync_to_async
-    def get_event_object(self, event_id):
-        # event_in_focus = Event.objects.get(id=event_id)
-        return list(Event.objects.get(id=event_id))
 
     @database_sync_to_async
     def get_event_questions(self, event_id):
