@@ -1,10 +1,14 @@
 import json
+
+from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from django.db.models import Sum
 
 from user_mgmt.models import AnonymousParticipant
-from host.models import AnswerChoice
-from walk.models import Response as AnswerResponse
+from host.models import AnswerChoice, Event, Question
+from walk.models import Response as AnswerResponse, Response
+from host.utils.get_bars_stats import get_bars_statistics
 
 
 class QAControlConsumer(AsyncWebsocketConsumer):
@@ -110,6 +114,71 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                     'increment_answer_id': answer_choice_id,
                 },
             )
+
+
+            # Broadcasting the live user line position counts for the host graph
+            await self.channel_layer.group_send(
+                self.room_name,
+                {
+                    'type': 'user_positions',
+                },
+            )
+
+
+    # Broadcasting the line position counts for the event
+    async def user_positions(self, event):
+        event_id = int(self.room_name.split("_")[-1])
+        position_stats = await self.get_bars_statistics(event_id)
+
+        await self.send(
+            text_data=json.dumps({
+                'meant_for': 'host',
+                'type': 'line_counts',
+                'data': {
+                    'position_stats': position_stats,
+                }
+            })
+        )
+
+
+    # Getting the line statistics
+    async def get_bars_statistics(self, event_id):
+        # event_in_focus = await self.get_event_object(event_id)
+        event_questions = await self.get_event_questions(event_id)
+        choices = await self.get_answer_choices(event_questions)
+        positions = await self.get_positions(choices)
+
+        position_counts = {}
+
+        for position in positions:
+            pos = position['position']
+            if pos in position_counts:
+                position_counts[pos] += 1
+            else:
+                position_counts[pos] = 1
+
+        return position_counts
+
+    @database_sync_to_async
+    def get_event_object(self, event_id):
+        # event_in_focus = Event.objects.get(id=event_id)
+        return list(Event.objects.get(id=event_id))
+
+    @database_sync_to_async
+    def get_event_questions(self, event_id):
+        event_questions = Question.objects.filter(event__id=event_id)
+        return list(event_questions)
+
+    @database_sync_to_async
+    def get_answer_choices(self, event_questions):
+        choices = AnswerChoice.objects.filter(question__in=event_questions)
+        return list(choices)
+
+    @database_sync_to_async
+    def get_positions(self, choices):
+        positions = Response.objects.filter(answer__in=choices).values('participant').annotate(
+            position=Sum('answer__value')).order_by('position')
+        return list(positions)
 
     # Recording the participant's answer choice in the db
     @database_sync_to_async
