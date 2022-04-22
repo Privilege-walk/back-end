@@ -52,7 +52,8 @@ _**Type:**_ Receivable message
     "meant_for": "all",
     "type": "answer_count",
     "data": {
-        "n_users_answered": 8
+        "n_users_answered": 25,
+        "increment_answer_id": 15
     }
 }
 ```
