@@ -1,6 +1,5 @@
 import json
 
-from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.db.models import Sum
@@ -8,7 +7,6 @@ from django.db.models import Sum
 from user_mgmt.models import AnonymousParticipant
 from host.models import AnswerChoice, Event, Question
 from walk.models import Response as AnswerResponse, Response
-from host.utils.get_bars_stats import get_bars_statistics
 
 
 class QAControlConsumer(AsyncWebsocketConsumer):
