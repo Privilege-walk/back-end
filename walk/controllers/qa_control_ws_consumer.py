@@ -25,11 +25,12 @@ class QAControlConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
         # Updating the active user count
-        count = getattr(self.channel_layer, self.room_name, 0)
+        ac_name = self.room_name + "_active_user_count"
+        count = getattr(self.channel_layer, ac_name, 0)
         if not count:
-            setattr(self.channel_layer, self.room_name, 1)
+            setattr(self.channel_layer, ac_name, 1)
         else:
-            setattr(self.channel_layer, self.room_name, count + 1)
+            setattr(self.channel_layer, ac_name, count + 1)
 
         # Telling everyone about the active user count change
         await self.channel_layer.group_send(
@@ -48,10 +49,11 @@ class QAControlConsumer(AsyncWebsocketConsumer):
         )
 
         # Updating the active users count
-        count = getattr(self.channel_layer, self.room_name, 0)
-        setattr(self.channel_layer, self.room_name, count - 1)
+        ac_name = self.room_name + "_active_user_count"
+        count = getattr(self.channel_layer, ac_name, 0)
+        setattr(self.channel_layer, ac_name, count - 1)
         if count == 1:
-            delattr(self.channel_layer, self.room_name)
+            delattr(self.channel_layer, ac_name)
 
         # Telling everyone about the active user count change
         await self.channel_layer.group_send(
@@ -193,7 +195,8 @@ class QAControlConsumer(AsyncWebsocketConsumer):
 
     # Broadcasting the count of the active users in the room
     async def active_user_count(self, event):
-        n_active_users = getattr(self.channel_layer, self.room_name, 0)
+        ac_name = self.room_name + "_active_user_count"
+        n_active_users = getattr(self.channel_layer, ac_name, 0)
 
         await self.send(
             text_data=json.dumps({
@@ -209,7 +212,10 @@ class QAControlConsumer(AsyncWebsocketConsumer):
     async def answered_users_count(self, event):
         ac_name = self.room_name + "_answer_count"
         answer_count = getattr(self.channel_layer, ac_name, 0)
-        increment_answer_id = event['increment_answer_id']
+        increment_answer_id = 0
+
+        if 'increment_answer_id' in event:
+            increment_answer_id = event['increment_answer_id']
 
         await self.send(
             text_data=json.dumps({
