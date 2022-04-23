@@ -1,11 +1,12 @@
-from django.db.models import Sum, Count
+from pickle import TRUE
 from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from rest_framework.permissions import IsAuthenticated
 
-from host.models import Question, AnswerChoice, Event
-from walk.models import Response
-from host.utils import get_bars_stats
+from host.models import Event
+from host.utils.get_bars_stats import get_bars_statistics
+from host.utils.get_participant_location import get_participant_location
 
 
 class EventStatistics(APIView):
@@ -16,7 +17,8 @@ class EventStatistics(APIView):
     def get(self, request):
         print(request.query_params)
         event_id = request.query_params.get('event_id', None)
-
+        print(event_id)
+        participant_unique_code = request.query_params.get('unique_code', None)
         if event_id is None:
             return Response(
                 {
@@ -27,6 +29,7 @@ class EventStatistics(APIView):
 
         try:
             event_in_focus = Event.objects.get(id=event_id)
+            print(event_in_focus)
 
         except:
             return Response(
@@ -36,4 +39,23 @@ class EventStatistics(APIView):
                 status=400
             )
 
-        position_stats = get_bars_stats(event_id)
+        position_stats = get_bars_statistics(event_id)
+        results = {}
+        results['barDefaultColor'] = '#8884d8'
+        data = []
+        participant_location = None
+        if participant_unique_code is not None:
+            participant_location = get_participant_location(event_id, participant_unique_code)
+        for position in position_stats:
+            line_data = {}
+            line_data['barName'] = ''
+            line_data['count'] = position['count']
+            if participant_location is not None and position['line_number'] == participant_location['position']:
+                line_data['participantLocation'] = True
+            else:
+                line_data['participantLocation'] = False
+            data.append(line_data)
+
+        results['data'] = data
+
+        return Response(results)
