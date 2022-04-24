@@ -43,11 +43,18 @@ class QAConsumerTest(TransactionTestCase):
         anno_part.save()
         self.participant_code = anno_part.unique_code
 
+        anno_part_two = AnonymousParticipant.objects.create(
+            event=eve
+        )
+
+        anno_part_two.save()
+        self.event_id = eve.id
+
     async def test_channel(self):
 
         ### Testing Connectivity
 
-        communicator = WebsocketCommunicator(application, "/ws/walk/qa_control/12/")
+        communicator = WebsocketCommunicator(application, "/ws/walk/qa_control/"+str(self.event_id)+"/")
         connected, subprotocol = await communicator.connect()
         self.assertEqual(connected, True)
 
@@ -107,7 +114,28 @@ class QAConsumerTest(TransactionTestCase):
         }
 
         raw_message = await communicator.receive_from()
+        await communicator.receive_from()
+        raw_message_2 = await communicator.receive_from()
         message = json.loads(raw_message)
+
+        self.assertEqual(message, expected)
+
+        # The host should receive the count of the number of people on different lines
+        expected = {
+            "meant_for": "host",
+            "type": "line_counts",
+            "data": {
+                "position_stats": {
+                    "0": 1,
+                    "1": 1
+                }
+            }
+        }
+
+        message = json.loads(raw_message_2)
+
+        print("Received Data")
+        print(message)
 
         self.assertEqual(message, expected)
 
