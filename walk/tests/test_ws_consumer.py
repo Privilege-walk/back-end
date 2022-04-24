@@ -43,6 +43,12 @@ class QAConsumerTest(TransactionTestCase):
         anno_part.save()
         self.participant_code = anno_part.unique_code
 
+        anno_part_two = AnonymousParticipant.objects.create(
+            event=eve
+        )
+
+        anno_part_two.save()
+
     async def test_channel(self):
 
         ### Testing Connectivity
@@ -112,3 +118,15 @@ class QAConsumerTest(TransactionTestCase):
         self.assertEqual(message, expected)
 
         await communicator.disconnect()
+
+        # The host should receive the count of the number of people on different lines
+        expected = {
+            "meant_for": "host",
+            "type": "line_counts",
+            "data": {
+                "position_stats": {
+                    "0": 1,
+                    "1": 1
+                }
+            }
+        }
