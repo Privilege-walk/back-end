@@ -134,8 +134,6 @@ class QAConsumerTest(TransactionTestCase):
 
         message = json.loads(raw_message_2)
 
-        print("Received Data")
-        print(message)
 
         self.assertEqual(message, expected)
 

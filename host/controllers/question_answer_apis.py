@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from host.models import Question, AnswerChoice, Event
 from host.serializers import hostless, parentless_questions_and_answers
@@ -34,10 +34,9 @@ class AddQuestion(APIView):
 
 
 class EventQuestionAnswers(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
-        print(request.query_params)
         event_id = request.query_params.get('event_id', None)
 
         if event_id is None:
