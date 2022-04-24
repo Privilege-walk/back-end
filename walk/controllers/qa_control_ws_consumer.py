@@ -115,7 +115,6 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                 },
             )
 
-
             # Broadcasting the live user line position counts for the host graph
             await self.channel_layer.group_send(
                 self.room_name,
@@ -123,7 +122,6 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                     'type': 'user_positions',
                 },
             )
-
 
     # Broadcasting the line position counts for the event
     async def user_positions(self, event):
@@ -139,7 +137,6 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                 }
             })
         )
-
 
     # Getting the line statistics
     async def get_bars_statistics(self, event_id):
