@@ -502,6 +502,8 @@ Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
 ```angular2html
 {
     "barDefaultColor": "#8884d8",
+    "xLabelMin": "Some text to be displayed on the graph",
+    "xLabelMax": "Something else you want to be displayed on the graph",
     "data": [
         {
             "barName": "",
