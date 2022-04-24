@@ -140,36 +140,36 @@ class QAControlConsumer(AsyncWebsocketConsumer):
 
     # Getting the line statistics
     async def get_bars_statistics(self, event_id):
-        event_questions = await self.get_event_questions(event_id)
-        choices = await self.get_answer_choices(event_questions)
-        positions = await self.get_positions(choices)
+        event_users = await self.get_event_users(event_id)
 
         position_counts = {}
 
-        for position in positions:
-            pos = position['position']
-            if pos in position_counts:
-                position_counts[pos] += 1
+        for user in event_users:
+            user_code = user.unique_code
+
+            user_position = await self.get_user_position(user_code)
+
+            if user_position in position_counts:
+                position_counts[user_position] += 1
             else:
-                position_counts[pos] = 1
+                position_counts[user_position] = 1
 
         return position_counts
 
     @database_sync_to_async
-    def get_event_questions(self, event_id):
-        event_questions = Question.objects.filter(event__id=event_id)
-        return list(event_questions)
+    def get_event_users(self, event_id):
+        event_users = AnonymousParticipant.objects.filter(event__id=event_id)
+        return list(event_users)
 
     @database_sync_to_async
-    def get_answer_choices(self, event_questions):
-        choices = AnswerChoice.objects.filter(question__in=event_questions)
-        return list(choices)
+    def get_user_position(self, participant_code):
+        participant_responses = Response.objects.filter(participant__unique_code=participant_code)
 
-    @database_sync_to_async
-    def get_positions(self, choices):
-        positions = Response.objects.filter(answer__in=choices).values('participant').annotate(
-            position=Sum('answer__value')).order_by('position')
-        return list(positions)
+        response_answer_values = []
+        for response in participant_responses:
+            response_answer_values.append(response.answer.value)
+
+        return sum(response_answer_values)
 
     # Recording the participant's answer choice in the db
     @database_sync_to_async
