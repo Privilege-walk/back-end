@@ -263,11 +263,7 @@ This can be used to view all the questions and the answers available for each qu
 ### Input data
 **Type:** JSON
 #### Request Header:
-```angular2html
-{
-    "Authorization": "Token <whatever_the_host's_token_is>"
-}
-```
+Not required
 #### Request Body:
 Not Required
 
