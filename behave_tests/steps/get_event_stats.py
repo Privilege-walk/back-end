@@ -4,6 +4,10 @@
 # from django.contrib.auth.models import User
 # from rest_framework.authtoken.models import Token
 
+# from user_mgmt.models import AnonymousParticipant
+# from host.models import AnswerChoice, Question
+# from walk.models import Response as AnswerResponse
+
 # use_step_matcher("re")
 
 # @given("that I am a registered host of privilege walk events and want to see the event statistics")
@@ -31,14 +35,15 @@
 #     context.key = user_auth_token.key
 
 #     data = {
-#         "name": "New year event"
+#         "name": "New year event",
+#         "x_label_min": "Some text to be displayed on the graph",
+#         "x_label_max": "Something else you want to be displayed on the graph",
 #     }
 #     headers = {
 #         'Authorization':'Token '+ context.key
 #     }
 
 #     resp = requests.post(context.test.live_server_url + "/host/events/create/", data, headers=headers)
-
 #     context.event_api_response_data = resp.json()
 #     context.eventId = context.event_api_response_data["id"]
 #     data = {
@@ -64,31 +69,45 @@
 #     }
 
 #     resp = requests.post(context.test.live_server_url + "/host/qa/create/", data, headers=headers)
-
+#     context.event_api_response_data = resp.json()
+#     question_id = context.event_api_response_data["id"]
 #     data = {
 #         "event_id": context.eventId
 #     }
-#     headers = {
-#         'Authorization':'Token '+ context.key
-#     }
-
 #     resp = requests.post(context.test.live_server_url + "/walk/register_participant/", data, headers=headers)
+#     context.event_api_response_data = resp.json()
+#     participant_code = context.event_api_response_data["participant_code"]
+    
+#     question = Question.objects.get(id=question_id)
+#     participant = AnonymousParticipant.objects.get(unique_code=participant_code)
+#     answer = AnswerChoice.objects.filter(question = question)
 
-#     # Response.
+#     AnswerResponse.objects.create(
+#         participant=participant,
+#         answer=answer[0]
+#     )
+#     resp = requests.post(context.test.live_server_url + "/walk/register_participant/", data, headers=headers)
+#     context.event_api_response_data = resp.json()
+#     participant_code = context.event_api_response_data["participant_code"]
+#     participant = AnonymousParticipant.objects.get(unique_code=participant_code)
+#     AnswerResponse.objects.create(
+#         participant=participant,
+#         answer=answer[0]
+#     )
 
 
-# @when("I make an API call to the get events API with my correct username")
+# @when("I make an API call to the get event statistics API with event id")
 # def step_impl(context):
 #     headers = {
 #         'Authorization':'Token '+ context.key
 #     }
 
-#     resp = requests.get(context.test.live_server_url + "/host/events/all/", headers=headers)
+#     resp = requests.get(context.test.live_server_url + "/host/event_stats/?event_id="+str(context.eventId), headers=headers)
 #     assert resp.status_code >= 200 and resp.status_code < 300
 
 #     context.api_response_data = resp.json()
 
 
-# @then("I expect the response that gives the list of events on my username as host")
+# @then("I expect the response that gives the list of bars and number of participants standing on the bars")
 # def step_impl(context):
-#     assert context.api_response_data["events"][0]["name"] == "New year event"
+#     assert context.api_response_data["data"][0]["count"] == 2

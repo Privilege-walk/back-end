@@ -32,7 +32,9 @@ def step_impl(context):
     context.key = user_auth_token.key
 
     data = {
-        "name": "New year event"
+        "name": "New year event",
+        "x_label_min": "Some text to be displayed on the graph",
+        "x_label_max": "Something else you want to be displayed on the graph",
     }
     headers = {
         'Authorization':'Token '+ context.key
@@ -110,7 +112,9 @@ def step_impl(context):
     context.key = user_auth_token.key
 
     data = {
-        "name": "New year event"
+        "name": "New year event",
+        "x_label_min": "Some text to be displayed on the graph",
+        "x_label_max": "Something else you want to be displayed on the graph",
     }
     headers = {
         'Authorization':'Token '+ context.key
