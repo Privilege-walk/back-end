@@ -498,21 +498,24 @@ Ex: `base_url.tld/endpoint/goes_here/?parameter_1=xxx&parameter_2=yyy`
 ```angular2html
 {
     "barDefaultColor": "#8884d8",
-    "xLabelMin": "Some text to be displayed on the graph",
-    "xLabelMax": "Something else you want to be displayed on the graph",
+    "x_label_min": "",
+    "x_label_max": "",
     "data": [
         {
             "barName": "",
+            "line_number": -2,
             "count": 1,
             "participantLocation": false
         },
         {
             "barName": "",
+            "line_number": 0,
             "count": 1,
             "participantLocation": false
         },
         {
             "barName": "",
+            "line_number": 2,
             "count": 2,
             "participantLocation": true
         },

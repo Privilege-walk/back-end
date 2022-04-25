@@ -36,7 +36,9 @@ def step_impl(context):
 @when("I make an API call to create event API with my correct username")
 def step_impl(context):
     data = {
-        "name": "New year event"
+        "name": "New year event",
+        "x_label_min": "Some text to be displayed on the graph",
+        "x_label_max": "Something else you want to be displayed on the graph",
     }
     headers = {
         'Authorization':'Token '+ context.key
