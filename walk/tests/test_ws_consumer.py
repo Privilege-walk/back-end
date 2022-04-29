@@ -64,6 +64,7 @@ class QAConsumerTest(TransactionTestCase):
             'type': 'active_user_count',
             'data': {
                 'n_active_users': 1,
+                'question_index': -1
             }
         }
 
@@ -77,13 +78,20 @@ class QAConsumerTest(TransactionTestCase):
 
         # Host side
         await communicator.send_to(json.dumps({
-            "type": "question_move"
+            "type": "question_move",
+            "data": {
+                "questionIndex": -1,
+                "endEvent": False
+            }
         }))
 
         # Participant side
         expected = {
             "meant_for": "participants",
             "type": "question_move",
+            "data": {
+                "question_index": -1
+            }
         }
         raw_message = await communicator.receive_from()
         message = json.loads(raw_message)
