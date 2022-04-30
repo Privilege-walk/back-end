@@ -11,9 +11,14 @@ def get_participant_location(event_id, participant_unique_code):
     choices = AnswerChoice.objects.filter(question__in = event_questions)
     participant = AnonymousParticipant.objects.filter(unique_code = participant_unique_code)
     position_details = Response.objects.filter(answer__in = choices, participant__in = participant).values('participant').annotate(position=Sum('answer__value'))
-    participant_details = {}
-    participant_details['participant_id'] = position_details[0]['participant']
-    participant_details['position'] = position_details[0]['position']
+    
+    # incase a participant didn't answer any question
+    if position_details.count() == 0:
+        return None
+    else:
+        participant_details = {}
+        participant_details['participant_id'] = position_details[0]['participant']
+        participant_details['position'] = position_details[0]['position']
     return participant_details
 
 

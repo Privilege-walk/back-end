@@ -11,9 +11,14 @@ from walk.models import Response as AnswerResponse, Response
 
 class QAControlConsumer(AsyncWebsocketConsumer):
 
+    def get_question_index_name(self):
+        # gets the name of the channel layer attribute that stores the question index
+        return self.room_name + "_question_index"
+
     # Handling new user connections
     async def connect(self):
-        self.room_name = "qa_session_" + str(self.scope['url_route']['kwargs']['eventid'])
+        self.event_id = str(self.scope['url_route']['kwargs']['eventid'])
+        self.room_name = "qa_session_" + self.event_id
 
         # Join room group
         await self.channel_layer.group_add(
@@ -31,6 +36,14 @@ class QAControlConsumer(AsyncWebsocketConsumer):
             setattr(self.channel_layer, ac_name, 1)
         else:
             setattr(self.channel_layer, ac_name, count + 1)
+
+        # Get the current question index
+        question_index_name = self.get_question_index_name()
+        # when question_index == -1, this means event hasn't yet started
+        question_index = getattr(self.channel_layer, question_index_name, -1)
+        if question_index == -1:
+            setattr(self.channel_layer, question_index_name, question_index)
+
 
         # Telling everyone about the active user count change
         await self.channel_layer.group_send(
@@ -68,13 +81,22 @@ class QAControlConsumer(AsyncWebsocketConsumer):
         in_data = json.loads(text_data)
 
         if in_data['type'] == 'question_move':
+            question_index = in_data["data"]["questionIndex"]
+            setattr(self.channel_layer, self.get_question_index_name(), question_index)
+            
             # Telling all the participants to switch to the next question on the list
             await self.channel_layer.group_send(
                 self.room_name,
                 {
-                    'type': 'question_move'
+                    'type': 'question_move',
                 }
             )
+
+            # if event has ended
+            end_event = in_data["data"]["endEvent"]
+            print(in_data)
+            if end_event:
+                await self.update_event_status(self.event_id, "Ended")
 
             # Resetting the answer count
             ac_name = self.room_name + "_answer_count"
@@ -181,12 +203,23 @@ class QAControlConsumer(AsyncWebsocketConsumer):
             answer=answer
         )
 
+    @database_sync_to_async
+    def update_event_status(self, event_id, event_status):
+        event = Event.objects.get(id=event_id)
+        event.status = event_status
+        event.save()
+
     # Broadcasting the question move
     async def question_move(self, event):
+        question_index = getattr(self.channel_layer, self.get_question_index_name(), -1)
         await self.send(
             text_data=json.dumps({
                 'meant_for': 'participants',
                 'type': 'question_move',
+                'data': {
+                        # specifies question index to move to in case a participant lost connection
+                        'question_index': question_index
+                    }
             })
         )
 
@@ -194,6 +227,7 @@ class QAControlConsumer(AsyncWebsocketConsumer):
     async def active_user_count(self, event):
         ac_name = self.room_name + "_active_user_count"
         n_active_users = getattr(self.channel_layer, ac_name, 0)
+        question_index = getattr(self.channel_layer, self.get_question_index_name(), -1)
 
         await self.send(
             text_data=json.dumps({
@@ -201,6 +235,9 @@ class QAControlConsumer(AsyncWebsocketConsumer):
                 'type': 'active_user_count',
                 'data': {
                     'n_active_users': n_active_users,
+                    # incase participants loose connection and are left behind, 
+                    # question_index lets participants know the current question in the event
+                    'question_index': question_index 
                 }
             })
         )
